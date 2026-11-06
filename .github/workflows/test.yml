@@ -1,0 +1,39 @@
+# Install the manifest from this bucket as a user would, and check that its
+# autoupdate rebuilds the same manifest from the release (hash from SHA256SUMS).
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  install:
+    name: scoop install
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scoop
+        shell: pwsh
+        run: |
+          iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+          "$env:USERPROFILE\scoop\shims" | Out-File -FilePath $env:GITHUB_PATH -Append -Encoding utf8
+      - name: Install
+        shell: pwsh
+        run: |
+          scoop bucket add postext "$env:GITHUB_WORKSPACE"
+          scoop install postext
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          postext --version
+          $v = (Get-Content bucket/postext.json | ConvertFrom-Json).version
+          if (-not ((postext --version) -match "postext $v ")) { throw "postext --version is not $v" }
+      - name: checkver and autoupdate
+        shell: pwsh
+        run: |
+          $scoop = scoop prefix scoop
+          & "$scoop\bin\checkver.ps1" -App postext -Dir bucket -ForceUpdate
+          git diff --exit-code -- bucket/postext.json
