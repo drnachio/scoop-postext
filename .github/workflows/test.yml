@@ -37,5 +37,10 @@ jobs:
         shell: pwsh
         run: |
           $scoop = scoop prefix scoop
-          & "$scoop\bin\checkver.ps1" -App postext -Dir bucket -ForceUpdate
+          # Rebuilds the manifest from the latest release: the same file back
+          # means checkver found the version and autoupdate the hash
+          $out = & "$scoop\bin\checkver.ps1" -App postext -Dir bucket -ForceUpdate *>&1 | Out-String
+          $out
+          if ($out -match 'ERROR|WARN|could not') { throw 'checkver or autoupdate failed' }
+          if ($out -notmatch 'Autoupdating postext') { throw 'autoupdate did not run' }
           git diff --exit-code -- bucket/postext.json

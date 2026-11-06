@@ -10,7 +10,9 @@
         }
     },
     "bin": "postext.exe",
-    "checkver": "github",
+    "checkver": {
+        "github": "https://github.com/drnachio/postext"
+    },
     "autoupdate": {
         "architecture": {
             "64bit": {
