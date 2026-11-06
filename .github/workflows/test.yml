@@ -25,7 +25,9 @@ jobs:
       - name: Install
         shell: pwsh
         run: |
-          scoop bucket add postext "$env:GITHUB_WORKSPACE"
+          # this checkout as the bucket (Scoop wants a Git URL, not a path)
+          scoop bucket add postext "file:///$($env:GITHUB_WORKSPACE -replace '\\', '/')"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
           scoop install postext
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           postext --version
