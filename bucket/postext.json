@@ -1,12 +1,12 @@
 {
-    "version": "1.90.0",
+    "version": "1.90.1",
     "description": "Typeset books from Markdown: PDF, HTML, EPUB, page images and Word. One self-contained executable: the postext engine, its PDF, EPUB, HTML and Word writers, fonts and print profiles.",
     "homepage": "https://postext.dev/",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/drnachio/postext/releases/download/v1.90.0/postext-windows-x64.exe#/postext.exe",
-            "hash": "7f6ff89e7fc17c94c57991cbdd4f9638f34f8c37df34876fb310983f349047da"
+            "url": "https://github.com/drnachio/postext/releases/download/v1.90.1/postext-windows-x64.exe#/postext.exe",
+            "hash": "5e6a46c72ca77511f181099e3268deac5b50bb6e6ac5459967fd6ab1374e814b"
         }
     },
     "bin": "postext.exe",
